@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LIGA - Database Migration Toolkit</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="bg-texture"></div>
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Database Migration Toolkit • Lee, Infiere, Genera y Aplica</p>
+        <h1>LIGA</h1>
+        <p class="lede">Iván Alejandro Casillas Valle (Programador), Jorge Alberto Torres Barajas (Documentador) y Emilio Guillermo Ulibarri Silva (Tester)</p>
+      </div>
+      <div class="actions">
+        <button id="selectFileBtn" class="primary">Seleccionar archivo</button>
+        <span id="selectedFile" class="file-label">Ningún archivo elegido</span>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <p class="eyebrow">Origen</p>
+            <h2>Archivo y formato</h2>
+          </div>
+        </div>
+        <div class="fields">
+          <label>
+            Formato
+            <select id="format">
+              <option value="">Auto</option>
+              <option value="csv">CSV</option>
+              <option value="json">JSON</option>
+              <option value="xml">XML</option>
+            </select>
+          </label>
+          <label>
+            Encoding
+            <input id="encoding" placeholder="auto (utf-8/latin1)" />
+          </label>
+          <label>
+            Nombre de tabla
+            <input id="tableName" placeholder="Se deriva del archivo" />
+          </label>
+          <label>
+            DDL output
+            <input id="ddlOut" value="output/schema.sql" />
+          </label>
+          <label>
+            INSERT output
+            <input id="insertOut" value="output/inserts.sql" />
+          </label>
+          <label>
+            Reporte output
+            <input id="reportOut" value="output/report.json" />
+          </label>
+          <div class="toggles">
+            <label><input type="checkbox" id="dryRun" /> Dry-run (no inserta en MySQL)</label>
+            <label><input type="checkbox" id="bulk" checked /> Bulk insert</label>
+            <label><input type="checkbox" id="stopOnError" /> Abortar ante error</label>
+          </div>
+          <label>
+            Chunk size (bulk)
+            <input id="chunkSize" type="number" value="250" min="50" />
+          </label>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <p class="eyebrow">Destino</p>
+            <h2>Conexión MySQL</h2>
+          </div>
+        </div>
+        <div class="fields two-col">
+          <label>Host<input id="dbHost" value="localhost" /></label>
+          <label>Puerto<input id="dbPort" type="number" value="3306" /></label>
+          <label>Base de datos<input id="dbName" placeholder="nombre_bd" /></label>
+          <label>Usuario<input id="dbUser" value="root" /></label>
+          <label>Password<input id="dbPass" type="password" /></label>
+        </div>
+        <div class="card-footer">
+          <button id="runBtn" class="primary full">Ejecutar migración</button>
+        </div>
+      </section>
+
+      <section class="card wide">
+        <div class="card-header">
+          <div>
+            <p class="eyebrow">Seguimiento</p>
+            <h2>Progreso y logs</h2>
+          </div>
+          <div class="pill" id="statusPill">En espera</div>
+        </div>
+        <div class="progress">
+          <div id="progressBar"></div>
+          <span id="progressLabel">0%</span>
+        </div>
+        <pre id="logPanel" class="log"></pre>
+        <div id="summary" class="summary hidden"></div>
+      </section>
+    </main>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "name": "proyectobd",
+  "version": "1.0.0",
+  "description": "Database Migration Toolkit (Electron + CLI) para migrar CSV/JSON/XML a MySQL con inferencia de esquema.",
+  "main": "src/electron/main.js",
+  "bin": {
+    "db-migration-toolkit": "index.js"
+  },
+  "type": "commonjs",
+  "scripts": {
+    "start": "electron .",
+    "cli": "node index.js",
+    "test": "echo \"No tests configured yet\""
+  },
+  "keywords": [
+    "database",
+    "migration",
+    "electron",
+    "mysql",
+    "csv",
+    "json",
+    "xml"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cli-progress": "^3.12.0",
+    "commander": "^14.0.2",
+    "csv-parse": "^6.1.0",
+    "electron": "^39.2.3",
+    "iconv-lite": "^0.7.0",
+    "jschardet": "^3.1.4",
+    "mysql2": "^3.15.3",
+    "xml2js": "^0.6.2"
+  }
+}
