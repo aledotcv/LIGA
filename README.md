@@ -23,7 +23,6 @@ A comprehensive toolkit for migrating data from CSV, JSON, XML, Access databases
 
 - Node.js 18+ and npm
 - MySQL 5.7+ or 8.0+
-- (Optional) ODBC drivers for Access file support
 
 ### Install Dependencies
 
