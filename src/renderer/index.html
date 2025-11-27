@@ -8,105 +8,229 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    <div class="glow glow-3"></div>
+    <div id="intro-overlay" class="intro-overlay">
+      <div class="intro-content">
+        <div class="line-container">
+          <div class="line"></div>
+          <div class="word">Lee</div>
+        </div>
+        <div class="line-container">
+          <div class="line"></div>
+          <div class="word">Infiere</div>
+        </div>
+        <div class="line-container">
+          <div class="line"></div>
+          <div class="word">Genera</div>
+        </div>
+        <div class="line-container">
+          <div class="line"></div>
+          <div class="word">Aplica</div>
+        </div>
+        <h1 class="intro-logo">LIGA</h1>
+      </div>
+    </div>
     <div class="bg-texture"></div>
-    <header class="hero">
-      <div>
-        <p class="eyebrow">Database Migration Toolkit • Lee, Infiere, Genera y Aplica</p>
-        <h1>LIGA</h1>
-        <p class="lede">Iván Alejandro Casillas Valle (Programador), Jorge Alberto Torres Barajas (Documentador) y Emilio Guillermo Ulibarri Silva (Tester)</p>
-      </div>
-      <div class="actions">
-        <button id="selectFileBtn" class="primary">Seleccionar archivo</button>
-        <span id="selectedFile" class="file-label">Ningún archivo elegido</span>
-      </div>
-    </header>
-
-    <main class="grid">
-      <section class="card">
-        <div class="card-header">
-          <div>
-            <p class="eyebrow">Origen</p>
-            <h2>Archivo y formato</h2>
+    <div class="app-shell">
+      <header class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Database Migration Toolkit · Lee, Infiere, Genera y Aplica</p>
+          <h1>LIGA</h1>
+          <p class="lede">
+            Iván Alejandro Casillas Valle (Programador), Jorge Alberto Torres Barajas (Documentador) y Emilio Guillermo
+            Ulibarri Silva (Tester)
+          </p>
+          <div class="mode-switch">
+            <label><input type="radio" name="operationMode" value="import" checked /> Importar archivo → MySQL</label>
+            <label><input type="radio" name="operationMode" value="export" /> Exportar MySQL → archivo</label>
           </div>
         </div>
-        <div class="fields">
-          <label>
-            Formato
-            <select id="format">
-              <option value="">Auto</option>
-              <option value="csv">CSV</option>
-              <option value="json">JSON</option>
-              <option value="xml">XML</option>
-            </select>
-          </label>
-          <label>
-            Encoding
-            <input id="encoding" placeholder="auto (utf-8/latin1)" />
-          </label>
-          <label>
-            Nombre de tabla
-            <input id="tableName" placeholder="Se deriva del archivo" />
-          </label>
-          <label>
-            DDL output
-            <input id="ddlOut" value="output/schema.sql" />
-          </label>
-          <label>
-            INSERT output
-            <input id="insertOut" value="output/inserts.sql" />
-          </label>
-          <label>
-            Reporte output
-            <input id="reportOut" value="output/report.json" />
-          </label>
-          <div class="toggles">
-            <label><input type="checkbox" id="dryRun" /> Dry-run (no inserta en MySQL)</label>
-            <label><input type="checkbox" id="bulk" checked /> Bulk insert</label>
-            <label><input type="checkbox" id="stopOnError" /> Abortar ante error</label>
-          </div>
-          <label>
-            Chunk size (bulk)
-            <input id="chunkSize" type="number" value="250" min="50" />
-          </label>
+        <div class="actions" id="importActions">
+          <p class="eyebrow mini">Selección rápida</p>
+          <button id="selectInputBtn" class="primary">Seleccionar origen</button>
+          <span id="selectedInput" class="file-label">Ningún origen elegido</span>
+          <small class="hint">Compatible con archivos individuales, Access (.mdb/.accdb) o directorios (modo lote)</small>
         </div>
-      </section>
+      </header>
 
-      <section class="card">
-        <div class="card-header">
-          <div>
-            <p class="eyebrow">Destino</p>
-            <h2>Conexión MySQL</h2>
+      <main class="grid">
+        <section class="card" data-mode="import">
+          <div class="card-header">
+            <div>
+              <p class="eyebrow">Origen</p>
+              <h2>Archivo y formato</h2>
+            </div>
           </div>
-        </div>
-        <div class="fields two-col">
-          <label>Host<input id="dbHost" value="localhost" /></label>
-          <label>Puerto<input id="dbPort" type="number" value="3306" /></label>
-          <label>Base de datos<input id="dbName" placeholder="nombre_bd" /></label>
-          <label>Usuario<input id="dbUser" value="root" /></label>
-          <label>Password<input id="dbPass" type="password" /></label>
-        </div>
-        <div class="card-footer">
-          <button id="runBtn" class="primary full">Ejecutar migración</button>
-        </div>
-      </section>
-
-      <section class="card wide">
-        <div class="card-header">
-          <div>
-            <p class="eyebrow">Seguimiento</p>
-            <h2>Progreso y logs</h2>
+          <div class="fields">
+            <label>
+              Formato
+              <select id="format">
+                <option value="">Auto</option>
+                <option value="csv">CSV</option>
+                <option value="json">JSON</option>
+                <option value="xml">XML</option>
+                <option value="access">Access (.mdb/.accdb)</option>
+              </select>
+            </label>
+            <label>
+              Encoding
+              <input id="encoding" placeholder="auto (utf-8/latin1)" />
+            </label>
+            <label>
+              Nombre de tabla
+              <input id="tableName" placeholder="Se deriva del archivo" />
+            </label>
+            <label>
+              DDL output
+              <input id="ddlOut" value="output/schema.sql" />
+            </label>
+            <label>
+              INSERT output
+              <input id="insertOut" value="output/inserts.sql" />
+            </label>
+            <label>
+              Reporte output
+              <input id="reportOut" value="output/report.json" />
+            </label>
+            <label id="accessTablesRow" class="hidden">
+              Tablas Access (coma separadas)
+              <input id="accessTables" placeholder="Clientes, Ventas (opcional)" />
+            </label>
+            <div class="toggles">
+              <label><input type="checkbox" id="dryRun" /> Dry-run (no inserta en MySQL)</label>
+              <label><input type="checkbox" id="bulk" checked /> Bulk insert</label>
+              <label><input type="checkbox" id="stopOnError" /> Abortar ante error</label>
+            </div>
+            <label>
+              Chunk size (bulk)
+              <input id="chunkSize" type="number" value="250" min="50" />
+            </label>
           </div>
-          <div class="pill" id="statusPill">En espera</div>
-        </div>
-        <div class="progress">
-          <div id="progressBar"></div>
-          <span id="progressLabel">0%</span>
-        </div>
-        <pre id="logPanel" class="log"></pre>
-        <div id="summary" class="summary hidden"></div>
-      </section>
-    </main>
+        </section>
 
+        <section class="card" data-mode="import">
+          <div class="card-header">
+            <div>
+              <p class="eyebrow">Opciones avanzadas</p>
+              <h2>Validación y transformaciones</h2>
+            </div>
+          </div>
+          <div class="fields">
+            <div class="toggles">
+              <label><input type="checkbox" id="enableValidation" /> Validar datos antes de insertar</label>
+              <label><input type="checkbox" id="checkDuplicates" checked /> Detectar duplicados</label>
+              <label><input type="checkbox" id="checkInvalidValues" checked /> Validar valores</label>
+            </div>
+            <label>
+              Archivo de transformaciones (JSON)
+              <input id="transformConfig" placeholder="Opcional: config/transforms.json" />
+            </label>
+            <label>
+              Reporte de validación
+              <input id="validationReport" value="output/validation_report.json" />
+            </label>
+            <div class="toggles">
+              <label><input type="checkbox" id="batchMode" /> Modo lote (procesar directorio)</label>
+              <label><input type="checkbox" id="detectFKs" /> Detectar foreign keys implícitas</label>
+              <label><input type="checkbox" id="sortByDependencies" /> Ordenar por dependencias</label>
+            </div>
+            <label>
+              Archivo stored procedures
+              <input id="proceduresOut" value="output/procedures.sql" />
+            </label>
+            <div class="toggles">
+              <label><input type="checkbox" id="generateProcedures" /> Generar stored procedures CRUD</label>
+              <label><input type="checkbox" id="compressOutput" /> Comprimir salidas (.zip)</label>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <p class="eyebrow">Destino</p>
+              <h2>Conexión MySQL</h2>
+            </div>
+          </div>
+          <div class="fields two-col">
+            <label>Host<input id="dbHost" value="localhost" /></label>
+            <label>Puerto<input id="dbPort" type="number" value="3306" /></label>
+            <label>Base de datos<input id="dbName" placeholder="nombre_bd" /></label>
+            <label>Usuario<input id="dbUser" value="root" /></label>
+            <label>Password<input id="dbPass" type="password" /></label>
+          </div>
+          <div class="card-footer">
+            <button id="runBtn" class="primary full" data-mode="import">Ejecutar migración</button>
+          </div>
+        </section>
+
+        <section class="card hidden" id="exportCard" data-mode="export">
+          <div class="card-header">
+            <div>
+              <p class="eyebrow">Exportar</p>
+              <h2>MySQL → Archivo</h2>
+            </div>
+          </div>
+          <div class="fields">
+            <div class="toggles">
+              <label><input type="radio" name="exportSourceType" value="table" checked /> Tabla</label>
+              <label><input type="radio" name="exportSourceType" value="sql" /> Archivo SQL</label>
+            </div>
+            <label id="exportTableContainer">
+              <span id="exportTableLabel">Tabla</span>
+              <div class="input-inline">
+                <input id="exportTable" placeholder="nombre_tabla" list="tablesList" />
+                <button id="listTablesBtn" type="button" class="ghost">Listar tablas</button>
+              </div>
+            </label>
+            <label id="exportSqlContainer" class="hidden">
+              Archivo SQL (Query)
+              <div class="input-inline">
+                <input id="exportSqlPath" placeholder="Selecciona un archivo .sql" readonly />
+                <button id="selectExportSqlBtn" type="button" class="ghost">Examinar</button>
+              </div>
+            </label>
+            <datalist id="tablesList"></datalist>
+            <label>
+              Formato de salida
+              <select id="exportFormat">
+                <option value="csv">CSV</option>
+                <option value="json">JSON</option>
+                <option value="xml">XML</option>
+              </select>
+            </label>
+            <label>
+              Ruta de salida
+              <input id="exportOutput" value="output/export.csv" />
+            </label>
+            <div class="toggles">
+              <label><input type="checkbox" id="exportCompress" /> Comprimir salida (.zip)</label>
+            </div>
+            <div class="card-footer">
+              <button id="runExportBtn" class="primary full">Exportar tabla</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="card wide">
+          <div class="card-header">
+            <div>
+              <p class="eyebrow">Seguimiento</p>
+              <h2>Progreso y logs</h2>
+            </div>
+            <div class="pill" id="statusPill">En espera</div>
+          </div>
+          <div class="progress">
+            <div id="progressBar"></div>
+            <span id="progressLabel">0%</span>
+          </div>
+          <pre id="logPanel" class="log"></pre>
+          <div id="summary" class="summary hidden"></div>
+        </section>
+      </main>
+    </div>
     <script src="renderer.js"></script>
   </body>
 </html>

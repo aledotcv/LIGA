@@ -1,5 +1,9 @@
 const { sanitizeName } = require('./utils');
 
+// liite de bytes por clave en innoDB 
+const MAX_INDEX_BYTES = 3072;
+const BYTES_PER_CHAR = 4;
+
 const MAX_UNIQUE_SAMPLE = 10000;
 
 function isNullish(value) {
@@ -183,11 +187,46 @@ function finalizeType(stats) {
     return { sqlType: `DECIMAL(${precision},${scale})`, kind: 'decimal', precision, scale };
   }
 
+  // detectar candidatos a ENUM
+  if (!stats.uniqueCapped && stats.uniqueValues.size > 0 && stats.uniqueValues.size <= 10 && stats.uniqueValues.size < nonNull * 0.1) {
+    const enumValues = Array.from(stats.uniqueValues)
+      .filter(v => v !== null && v !== undefined && v !== '')
+      .map(v => `'${String(v).replace(/'/g, "''")}'`)
+      .join(', ');
+    if (enumValues) {
+      return { sqlType: `ENUM(${enumValues})`, kind: 'enum', enumValues: Array.from(stats.uniqueValues) };
+    }
+  }
+
+  // detectar si puede ser BLOB
   const maxLen = Math.max(stats.maxLength || 1, 1);
+  if (maxLen > 65535) {
+    return { sqlType: 'LONGBLOB', kind: 'blob', length: maxLen };
+  }
+  if (maxLen > 16777215) {
+    return { sqlType: 'LONGBLOB', kind: 'blob', length: maxLen };
+  }
   if (maxLen > 1000) {
     return { sqlType: 'TEXT', kind: 'text', length: maxLen };
   }
+  
   return { sqlType: `VARCHAR(${Math.max(maxLen, 1)})`, kind: 'text', length: maxLen };
+}
+
+function isIndexFriendly(typeInfo, stats) {
+  const sqlType = (typeInfo.sqlType || '').toUpperCase();
+  if (/TEXT|BLOB/.test(sqlType)) {
+    return false;
+  }
+
+  const lengthMatch = sqlType.match(/VARCHAR\((\d+)\)/i);
+  const length = lengthMatch ? Number(lengthMatch[1]) : typeInfo.length || stats.maxLength || 0;
+
+  if (!length) {
+    return true;
+  }
+
+  return length * BYTES_PER_CHAR <= MAX_INDEX_BYTES;
 }
 
 function ensureUniqueName(candidate, used) {
@@ -222,7 +261,9 @@ function inferSchema(rows, options = {}) {
 
   const columns = Array.from(statsMap.values()).map((stats) => {
     const typeInfo = finalizeType(stats);
+    const indexFriendly = isIndexFriendly(typeInfo, stats);
     const uniqueCandidate =
+      indexFriendly &&
       !stats.uniqueCapped &&
       stats.uniqueValues.size > 0 &&
       stats.uniqueValues.size === stats.total - stats.nulls &&
@@ -235,6 +276,7 @@ function inferSchema(rows, options = {}) {
       unique: uniqueCandidate,
       maxLength: stats.maxLength,
       inferredKind: typeInfo.kind,
+      indexFriendly,
     };
   });
 

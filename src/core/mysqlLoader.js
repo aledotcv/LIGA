@@ -29,7 +29,7 @@ async function insertChunk({
     return chunk.length;
   } catch (err) {
     if (!continueOnError) throw err;
-    // Fallback a inserción fila por fila para aislar errores
+    // fallback a inserción fila por fila para aislar errores
     let success = 0;
     for (let idx = 0; idx < chunk.length; idx += 1) {
       const row = chunk[idx];

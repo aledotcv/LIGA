@@ -66,6 +66,12 @@ function normalizeValueForColumn(value, column) {
 
   const type = (column.sqlType || '').toUpperCase();
 
+  // procesar booleanos antes que enteros para TINYINT(1)
+  if (type.includes('BOOL') || type.includes('TINYINT(1)') || column.inferredKind === 'boolean') {
+    const lower = value.toString().toLowerCase();
+    return ['true', 'yes', 'si', 'y', '1'].includes(lower) || value === true ? 1 : 0;
+  }
+
   if (type.includes('DATE')) {
     if (value instanceof Date) {
       const parts = {
@@ -92,11 +98,6 @@ function normalizeValueForColumn(value, column) {
     const numeric = Number(sanitized);
     if (Number.isNaN(numeric)) return null;
     return numeric;
-  }
-
-  if (type.includes('BOOL') || type.includes('TINYINT(1)')) {
-    const lower = value.toString().toLowerCase();
-    return ['true', 'yes', 'si', '1', 'y'].includes(lower) || value === true ? 1 : 0;
   }
 
   return value.toString();

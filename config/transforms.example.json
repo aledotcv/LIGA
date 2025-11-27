@@ -1,0 +1,69 @@
+{
+  "columnRenames": {
+    "old_column_name": "new_column_name",
+    "customer_name": "client_name",
+    "fecha_nacimiento": "birth_date"
+  },
+  "textTransformations": {
+    "first_name": [
+      { "type": "TRIM" },
+      { "type": "titleCase" }
+    ],
+    "last_name": [
+      { "type": "TRIM" },
+      { "type": "UPPER" }
+    ],
+    "email": [
+      { "type": "TRIM" },
+      { "type": "lower" }
+    ],
+    "description": [
+      { "type": "trim" },
+      { "type": "replace", "from": "  ", "to": " ", "regex": false },
+      { "type": "replace", "from": "\\s+", "to": " ", "regex": true }
+    ],
+    "phone": [
+      { "type": "replace", "from": "[^0-9]", "to": "", "regex": true }
+    ]
+  },
+  "valueMappings": {
+    "status": {
+      "SI": 1,
+      "NO": 0,
+      "Sí": 1,
+      "sí": 1,
+      "si": 1,
+      "no": 0,
+      "YES": 1,
+      "yes": 1,
+      "Y": 1,
+      "N": 0,
+      "TRUE": 1,
+      "FALSE": 0,
+      "true": 1,
+      "false": 0
+    },
+    "gender": {
+      "M": "Male",
+      "F": "Female",
+      "H": "Male",
+      "Masculino": "Male",
+      "Femenino": "Female",
+      "Hombre": "Male",
+      "Mujer": "Female",
+      "male": "Male",
+      "female": "Female"
+    },
+    "active": {
+      "Activo": 1,
+      "Inactivo": 0,
+      "Active": 1,
+      "Inactive": 0,
+      "SI": 1,
+      "NO": 0
+    }
+  },
+  "globalTextTransformations": [
+    { "type": "trim" }
+  ]
+}
