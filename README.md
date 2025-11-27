@@ -106,9 +106,3 @@ npm run build
 ```
 
 Output will be in the `dist/` directory.
-
-## Authors
-
-- Iván Alejandro Casillas Valle (Programador)
-- Jorge Alberto Torres Barajas (Documentador)
-- Emilio Guillermo Ulibarri Silva (Tester)
